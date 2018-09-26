@@ -46,7 +46,7 @@ public class SchuelerBL {
         bl.add(s1);
         bl.add(s2);
 
-        File f = new File("./data.csv");
+        File f = new File("./data.bin");
         try {
             bl.save(f);
         } catch (Exception ex) {
