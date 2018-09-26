@@ -1,9 +1,9 @@
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -17,31 +17,21 @@ public class SchuelerBL {
     }
 
     public void save(File f) throws Exception {
-        BufferedWriter bw = new BufferedWriter(
-                new FileWriter(f));
+        ObjectOutputStream oos = new ObjectOutputStream(
+                new FileOutputStream(f));
         for (Schueler s : klasse) {
-            bw.write(s.getName());
-            bw.write(";");
-            bw.write(s.getBirthday().toString());
-            bw.newLine();
+            oos.writeObject(s);
         }
-        bw.flush();
+        oos.flush();
     }
 
     public void load(File f) throws Exception {
-        BufferedReader br = new BufferedReader(
-                new FileReader(f));
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(";");
-            try {
-                add(new Schueler(parts[0],
-                        LocalDate.parse(parts[1])));
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(f));
+        Object s = null;
+        while ((s = ois.readObject()) != null) {
+            add((Schueler) s);
         }
-
     }
 
     public static void main(String[] args) {
